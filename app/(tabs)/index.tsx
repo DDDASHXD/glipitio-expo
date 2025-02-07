@@ -1,25 +1,23 @@
-import { StyleSheet, View, Text } from "react-native";
-import TestComponent from "@/components/test-component";
+import { router } from "expo-router";
+import React from "react";
+import { View, Text } from "react-native";
+import Button from "@/components/ui/button";
+import Topbar from "@/components/topbar";
+import RecentReceipts from "@/components/widgets/recent-receipts";
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   return (
-    <View style={styles.container}>
-      <TestComponent />
-      <Text>Hej</Text>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: 110,
+        paddingHorizontal: 24
+      }}
+    >
+      <Topbar name="Home" />
+      <RecentReceipts />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingTop: 70
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white"
-  }
-});
+export default HomeScreen;

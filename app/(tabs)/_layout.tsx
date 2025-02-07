@@ -1,45 +1,61 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import TabBar from "@/components/tabbar";
+import { router, Stack } from "expo-router";
+import React from "react";
+import { View } from "react-native";
+import useConsentStore from "@/stores/consent.store";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+const TabsLayout = () => {
+  const { consent } = useConsentStore();
+  const [mounted, setMounted] = React.useState(false);
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  React.useEffect(() => {
+    if (!mounted) {
+      setMounted(true);
+    }
+  }, []);
+
+  // React.useEffect(() => {
+  //   if (mounted && !consent) {
+  //     setTimeout(() => {
+  //       router.replace("/consent");
+  //     }, 1000);
+  //   }
+  // }, [mounted, consent]);
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    <View style={{ flex: 1, backgroundColor: "F3F3F5" }}>
+      <Stack screenOptions={{ animation: "none" }}>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+            animation: "fade",
+            animationDuration: 100
+          }}
+        />
+        <Stack.Screen name="receipts" options={{ headerShown: false }} />
+        <Stack.Screen name="favorites" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="consent"
+          options={{
+            headerShown: false,
+            presentation: "modal",
+            animation: "slide_from_bottom",
+            sheetAllowedDetents: [100]
+          }}
+        />
+        <Stack.Screen
+          name="profile"
+          options={{
+            animation: "slide_from_bottom",
+            presentation: "modal",
+            headerShown: false
+          }}
+        />
+      </Stack>
+      <TabBar />
+    </View>
   );
-}
+};
+
+export default TabsLayout;
