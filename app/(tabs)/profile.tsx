@@ -6,6 +6,7 @@ import useAuthStore from "@/stores/auth.store";
 
 const ProfileModal = () => {
   const logout = useAuthStore((state) => state.logout);
+  const navigateToSettings = () => router.push("/settings");
   const user = useAuthStore((state) => state.user);
 
   return (
@@ -14,6 +15,9 @@ const ProfileModal = () => {
       <Text>{user?.email}</Text>
       <Button onPress={logout} variant="secondary">
         <Text>Log out</Text>
+      </Button>
+      <Button onPress={navigateToSettings} variant="secondary">
+        <Text>Settings</Text>
       </Button>
     </View>
   );
