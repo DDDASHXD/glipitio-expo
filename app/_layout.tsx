@@ -96,6 +96,22 @@ const RootLayout = () => {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
+          <Stack.Screen
+            name="consent"
+            options={{
+              presentation: "modal",
+              animation: "slide_from_bottom",
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name="profile"
+            options={{
+              presentation: "modal",
+              animation: "slide_from_bottom",
+              headerShown: false
+            }}
+          />
         </Stack>
       </ThemeProvider>
     </>

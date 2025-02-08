@@ -1,13 +1,34 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Animated } from "react-native";
 import { IconSymbol } from "./ui/IconSymbol";
 import { router } from "expo-router";
 import Button from "./ui/button";
 import * as Haptics from "expo-haptics";
+import { BlurView } from "expo-blur";
 
-const Topbar = ({ name }: { name: string }) => {
+const Topbar = ({
+  name,
+  scrollY = 0
+}: {
+  name: string;
+  scrollY?: number | Animated.Value;
+}) => {
+  const opacity =
+    scrollY instanceof Animated.Value
+      ? scrollY.interpolate({
+          inputRange: [0, 20, 50],
+          outputRange: [0, 0.5, 1],
+          extrapolate: "clamp"
+        })
+      : scrollY > 0
+      ? 1
+      : 0;
+
   return (
     <View style={styles.container}>
+      <Animated.View style={[StyleSheet.absoluteFill, { opacity }]}>
+        <BlurView intensity={80} style={StyleSheet.absoluteFill} tint="light" />
+      </Animated.View>
       <Button
         style={styles.left}
         onPress={() => {
@@ -29,9 +50,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    height: 120,
+    right: 0,
+    zIndex: 10,
+    height: 110,
     width: "100%",
-    padding: 10,
+    paddingHorizontal: 10,
     backgroundColor: "transparent",
     flexDirection: "row",
     justifyContent: "space-between",

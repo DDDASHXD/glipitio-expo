@@ -13,14 +13,17 @@ import useAuthStore from "@/stores/auth.store";
 import { strapiClient } from "@/lib/strapi";
 import axios from "axios";
 import Button from "@/components/ui/button";
+import Spinner from "@/components/spinner";
 
 const SignIn = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const login = useAuthStore((state) => state.login);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSignIn = async () => {
     try {
+      setIsLoading(true);
       await login(email, password);
       router.replace("/");
     } catch (error: any) {
@@ -30,6 +33,8 @@ const SignIn = () => {
         `Failed to connect to server at ${process.env.NEXT_PUBLIC_STRAPI_URL}. ` +
           "Please check your connection and server URL.";
       alert(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,8 +131,11 @@ const SignIn = () => {
               Keyboard.dismiss();
               handleSignIn();
             }}
+            disabled={isLoading}
           >
-            <Text style={{ color: "white", fontWeight: "600" }}>Continue</Text>
+            <Text style={{ color: "white", fontWeight: "600" }}>
+              {isLoading ? <Spinner color="white" /> : "Continue"}
+            </Text>
           </TouchableOpacity>
 
           <View

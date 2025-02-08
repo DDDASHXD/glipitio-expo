@@ -1,8 +1,9 @@
-import TabBar from "@/components/tabbar";
-import { router, Stack } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
 import { View } from "react-native";
 import useConsentStore from "@/stores/consent.store";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { BlurView } from "expo-blur";
 
 const TabsLayout = () => {
   const { consent } = useConsentStore();
@@ -24,36 +25,81 @@ const TabsLayout = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "F3F3F5" }}>
-      <Stack screenOptions={{ animation: "none" }}>
-        <Stack.Screen
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          animation: "fade",
+          tabBarStyle: {
+            position: "absolute",
+            borderTopWidth: 1,
+            borderTopColor: "rgba(0, 0, 0, 0.1)",
+            paddingBottom: 20,
+            backgroundColor: "transparent"
+          },
+          tabBarBackground: () => (
+            <BlurView intensity={80} style={{ flex: 1 }} tint="light" />
+          ),
+          tabBarActiveTintColor: "#000000",
+          tabBarInactiveTintColor: "#8E8E93",
+          tabBarLabelStyle: {
+            fontSize: 12,
+            marginTop: 4
+          }
+        }}
+      >
+        <Tabs.Screen
           name="index"
           options={{
-            headerShown: false,
-            animation: "fade",
-            animationDuration: 100
+            tabBarLabel: "Home",
+            tabBarIcon: ({ focused, color }) => (
+              <IconSymbol
+                name={focused ? "house.fill" : "house"}
+                size={24}
+                color={color}
+              />
+            )
           }}
         />
-        <Stack.Screen name="receipts" options={{ headerShown: false }} />
-        <Stack.Screen name="favorites" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="consent"
+        <Tabs.Screen
+          name="receipts"
           options={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-            sheetAllowedDetents: [100]
+            tabBarLabel: "Receipts",
+            tabBarIcon: ({ focused, color }) => (
+              <IconSymbol
+                name={focused ? "ticket.fill" : "ticket"}
+                size={24}
+                color={color}
+              />
+            )
           }}
         />
-        <Stack.Screen
-          name="profile"
+        <Tabs.Screen
+          name="stores"
           options={{
-            animation: "slide_from_bottom",
-            presentation: "modal",
-            headerShown: false
+            tabBarLabel: "Stores",
+            tabBarIcon: ({ focused, color }) => (
+              <IconSymbol
+                name={focused ? "storefront.fill" : "storefront"}
+                size={24}
+                color={color}
+              />
+            )
           }}
         />
-      </Stack>
-      <TabBar />
+        <Tabs.Screen
+          name="favorites"
+          options={{
+            tabBarLabel: "Favorites",
+            tabBarIcon: ({ focused, color }) => (
+              <IconSymbol
+                name={focused ? "heart.fill" : "heart"}
+                size={24}
+                color={color}
+              />
+            )
+          }}
+        />
+      </Tabs>
     </View>
   );
 };
